@@ -115,7 +115,7 @@ npm run test:e2e     # Playwright smoke tests, added by task D4
   - Explicit `.ts`/`.tsx` extensions on relative imports (`import App from './App.tsx'`).
 - Use function components and hooks only. Keep components small and flat: no repository layers, dependency injection, or global state frameworks (PRD §7).
 - `react-refresh/only-export-components` is on, so a `.tsx` file exports components only. Put contexts and hooks in their own `.ts` files.
-- Put Tailwind utility classes in JSX. Custom CSS goes only in `src/style.css`. Port class strings from `preview.html` verbatim unless you are fixing a listed gap.
+- Put Tailwind utility classes in JSX. Custom CSS goes only in `src/style.css`. Since the owner redesign 2026-10-27, G-21, `preview.html` is the source for copy and content only; the visual language is the one described under "Design system" below.
 
 ## Architecture (target; details in `docs/website-mvp/plan.md` §3)
 
@@ -129,8 +129,8 @@ src/
   content/id.ts  en.ts   every visible string, aria-label, and alt text
   i18n/                  locale context, LocaleProvider, useLocale()
   types/site.ts          Locale, ServiceId, ImageKey, Dictionary, SiteConfig
-  components/            Header, Footer, Logo, SectionHeader, SkipLink, ExternalLink, ServiceDialog, OfficeGallery, MapEmbed
-  sections/              Hero, About, Principle, PracticeAreas, Values, Office, Insights
+  components/            Header, Footer, Logo, SectionHeader, SkipLink, ExternalLink, ServiceDialog, MapEmbed
+  sections/              Hero, About, Values, PracticeAreas, Office, Insights
 ```
 
 - Components get text only through `useLocale()`. JSX contains no hard-coded strings, including `aria-label` and `alt`.
@@ -152,15 +152,15 @@ src/
 | `muted` | `rgb(0 0 0 / .58)` | eyebrows, captions, card descriptions, notes. Text uses only these three tiers (white · white/75 · white/60 on the footer); green is for accents and links |
 | `sand` | `#B79770` | small bronze accents |
 
-- **Fonts:** Playfair Display for headings (`font-display`) and DM Sans for body and UI, with `display=swap`. No extra families.
-- **Layout:** about 1250 px maximum content width. Cards have 8–16 px radii; primary CTAs are pills. Borders and shadows are delicate. Icons come from `lucide-react`.
-- **Helper classes** (from `preview.html`): `section-eyebrow`, `photo-tint`, `soft-shadow`, `hero-blob`, `focus-ring`.
+- **Fonts:** DM Sans (optical-size axis, 400–700) for everything, with section headings semibold and tightly tracked, after apple.com / notion.com (G-21). Playfair Display (400 + italic 400, `font-display`) is used **only for the hero `<h1>`**, at the owner's request (G-22). `display=swap`. No other families.
+- **Type scale (G-20, G-21):** use the theme tokens in `src/style.css`, never arbitrary `text-[Npx]`/`leading-[…]`/`tracking-[…]`. `text-display`/`text-display-sm` (hero h1 in Playfair, 64/44), `text-h2`/`text-h2-sm` (44/32), `text-title` (28, tile and dialog titles), `text-h3` (20), `text-lead` (19), `text-para` (16, body), `text-small` (14), `text-caption` (13), `text-ui` (15, nav/buttons), `text-label` (11 uppercase, logo and footer only). Headings use `font-semibold` and `text-balance`. Only the logo wordmark keeps fixed sizes.
+- **Layout:** about 1250 px maximum content width. Content sits in large tiles with a 28 px radius (`bg-sage-light`/`bg-sage` on `paper`/`cream` sections) arranged as bento grids; no drop shadows on tiles. Buttons are pills (`btn btn-primary` filled forest, `btn btn-secondary` outlined). Arrow icons only on external links (exception: the hero's two links, as in the original design, G-22). Sentence-case eyebrows in forest, no numbering or wide-tracked caps. No decorative blobs, circles, overlapping cards, or scroll hints. Icons come from `lucide-react`, used sparingly.
+- **Helper classes** (`src/style.css`): `section-eyebrow`, `btn`, `btn-primary`, `btn-secondary`, `photo-tint`, `focus-ring`.
 - **Motion** is optional and subtle (150–300 ms). It always respects `prefers-reduced-motion`. No parallax.
 - **Light first:** no dark or gold-heavy blocks above the fold. The only dark surface is the footer.
 - **Breakpoints:** check 320, 375, 768, 1024, and 1440 px. There must be no horizontal scroll, clipping, overlap, or stretched photos.
-- **Hybrid layout (owner decision):** everything follows `preview.html` except two sections, which follow `preview.png`'s composition. Full specs are in requirement.md §5.
-  - **About:** text | portrait | credential list.
-  - **Office:** team photo | text + Maps | exterior photo.
+- **Page layout (owner redesign 2026-10-27, G-21; full spec in requirement.md §5):** Hero (original text column: serif headline with italic accents, eyebrow rule, pill + underlined link, scroll hint | rounded portrait with frosted caption and the floating formal-portrait card, G-22) → About bento (intro tile | portrait tile, credentials strip) → Values (one statement + three values) → Practice tiles → Office + location bento (team photo | location tile, [interior | formal: hidden by flag, G-24], full-width map, G-23) → Insights FAQ list → Footer.
+  - The map embed uses **coordinates only** (`site.mapEmbedUrl`). An embed that references the Google listing (the owner's `/maps/embed?pb=…`) overlays a place card with the street address and a star rating once the map is wide, and both are banned. Check this with screenshots, not frame text: the card's text isn't readable from the frame.
 
 ## Content guardrails (hard rules)
 
@@ -177,6 +177,7 @@ src/
   - Instagram/YouTube icons;
   - the "Kebijakan Privasi" / "Syarat & Ketentuan" links.
 - **Pejabat Lelang** stays hidden (`showAuctionOfficer: false`) until the owner confirms the appointment and its scope.
+- **Office photo row** (interior + formal portrait) is hidden (`showOfficePhotos: false`) at the owner's request, kept for later use (G-24). Don't delete it.
 - **Tone:** professional, warm, factual, restrained. No superlatives ("terbaik", "best", "number one"), no urgency, no solicitation, and no "konsultasi" or "hubungi kami" sales CTAs.
 - **Legal explainers** are general information and must show the disclaimer ("Konten bersifat informasi umum, bukan nasihat hukum…").
 - **Missing or unverified facts:** omit them or use neutral wording, and log them as an open item (`O-xx`). Never use placeholder text that could ship.
@@ -187,12 +188,12 @@ src/
 
 - Indonesian is the first-visit default (never use `navigator.language`). English comes from the switcher. A `localStorage` preference is optional.
 - `<html lang>`, `document.title`, and the meta description follow the locale.
-- No mixed-language UI. Aria-labels, alt texts, the dialog, the gallery status, and the disclaimer are all localized.
+- No mixed-language UI. Aria-labels, alt texts, the dialog, the map title, and the disclaimer are all localized.
 - One `<h1>` and a logical heading order. Use semantic landmarks, a skip link, and visible focus (`focus-ring`). Tap targets are at least 24 px (WCAG 2.2 AA); aim for 44 px.
 - **Mobile menu:** uses `aria-expanded` + `aria-controls` and closes on link click and `Escape`. No overlay traps clicks.
 - **Practice dialog:** uses native `<dialog>` with `showModal()`. Focus moves in and the background is inert. It closes via the button, the backdrop, or `Escape`, and focus returns to the trigger. Body scroll is locked while it is open.
 - **Insights:** accordion buttons use `aria-expanded` + `aria-controls` pointing at panel IDs.
-- **Gallery:** labelled prev/next buttons, wraps around, meaningful alt text per photo, position announced via `aria-live`.
+- **Office photos:** fixed tiles with meaningful, localized alt text per photo (the prev/next gallery was replaced, owner redesign 2026-10-27, G-21).
 - **External links:** `target="_blank"` always comes with `rel="noopener noreferrer"`.
 - No analytics, cookies, trackers, or forms. The Google Maps iframe (2D road map) is shown directly but only requested when the Office location card nears the viewport (IntersectionObserver, owner decision 2026-10-27); the plain Maps link always works.
 - No secrets or environment variables are needed. Never commit any.

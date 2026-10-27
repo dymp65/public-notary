@@ -65,6 +65,9 @@ Then add the following:
 - **Helper classes**, copied verbatim (see the `grep -A3` command in `CLAUDE.md`): `.soft-shadow`, `.focus-ring:focus-visible`, `.hero-blob`, `.section-eyebrow`, `.photo-tint`.
 - **Anchor offset (G-07).** Set `section[id] { scroll-margin-top: 86px }` at all widths; 86 px is the header height. This replaces the prototype's mobile-only `scroll-padding-top`.
 - **Dialog scroll lock:** `html:has(dialog[open]) { overflow: hidden }`.
+- **Map embed (G-23).** `site.mapEmbedUrl(locale)` = `https://maps.google.com/maps?q=-8.672171,115.168603&hl=<locale>&z=16&output=embed`. Don't switch back to the listing `pb=` embed: at full width it overlays Google's place card (street address + rating). The map is the full-width last row of the Office bento (`h-[360px] md:h-[420px] lg:h-[480px]`).
+- **Redesign (G-21, owner 2026-10-27).** The visual language follows apple.com / notion.com: DM Sans only (`opsz` axis), `.btn`/`.btn-primary`/`.btn-secondary` pills via `@apply`, 28 px tiles, bento grids, header 72 px (`section[id]` scroll margin 72 px; mobile menu at `top-[71px]`). Removed: `Principle.tsx`, `OfficeGallery.tsx`, `.soft-shadow`, `.hero-blob`, Playfair; dictionary keys `heroBadge`, `scroll`, `focusLabel`, `focusTitle`, `galleryTitle`, `galleryStatus`, `locationLabel`, `locationTitle`, `map.openLink`, `a11y.gallery*`; config `serviceImages` and `gallery` (now `officePhotos: ['interior', 'formal']`). The map tile stays narrow so Google doesn't render its place card (address and rating).
+- **Type scale (G-20).** `--text-*` theme tokens with `--line-height`/`--letter-spacing` sub-tokens (see CLAUDE.md → Design system). The body-size token is `para` because `text-body` is the colour. `.section-eyebrow` reads the `label` tokens. This deliberately replaces the prototype's per-element sizes.
 - **Text colours (G-19).** `--color-ink: rgb(0 0 0 / .9)`, `--color-body: rgb(0 0 0 / .72)`, `--color-muted: rgb(0 0 0 / .58)`. `.section-eyebrow` uses `muted`. Don't add arbitrary `text-[#…]` greys; pick a tier. Fonts stay Playfair Display + DM Sans.
 - **Page wrapper uses `overflow-x-clip`, not the prototype's `overflow-x-hidden`.** `hidden` turns the wrapper into a scroll container, which would stop the sticky header from sticking. `clip` clips the same way without that side effect.
 - **Reduced motion (G-10):**
@@ -245,7 +248,7 @@ Settle the exact proportions in the C10 visual pass. Use only prototype tokens, 
 As built:
 
 - About uses `lg:grid-cols-[1fr_.9fr_1fr]` and a portrait at `aspect-[1.1]`.
-- Office uses `lg:grid-cols-[1.4fr_1fr_.7fr]`. The team photo keeps the prototype's `aspect-[2.05]` at every width, because a narrower ratio would crop people out. The exterior is `aspect-[.85]`.
+- Office uses `lg:grid-cols-[1.2fr_1fr]` (exterior column removed, owner decision 2026-10-27). The team photo keeps the prototype's `aspect-[2.05]` at every width, because a narrower ratio would crop people out. The text column is wide enough for the full `h2`, so no `compact`.
 - `SectionHeader` gained a `compact` prop (`lg:text-[38px]` instead of `52px`) for these narrow columns. At 52 px, "Profesionalisme" alone is wider than the column.
 
 ### 4.8 Office gallery (B11, C5: G-15)

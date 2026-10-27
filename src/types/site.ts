@@ -33,10 +33,10 @@ export interface SiteConfig {
   images: Record<ImageKey, ImageMeta>
   sections: readonly SectionId[]
   services: readonly ServiceId[]
-  serviceImages: Record<ServiceId, ImageKey>
-  gallery: readonly ImageKey[]
+  officePhotos: readonly ImageKey[]
   flags: {
     showAuctionOfficer: boolean
+    showOfficePhotos: boolean
   }
 }
 
@@ -67,9 +67,6 @@ export interface Dictionary {
     switchLanguage: string
     newTab: string
     closeDialog: string
-    gallery: string
-    galleryPrev: string
-    galleryNext: string
   }
   images: Record<ImageKey, string>
   logoSubtitle: string
@@ -110,23 +107,16 @@ export interface Dictionary {
   modalTitle: string
   modalButton: string
 
-  focusLabel: string
-  focusTitle: string
   values: TitledText[]
 
   teamEyebrow: string
   teamTitle: string
   teamText: string
-  galleryTitle: string
-  galleryStatus: (current: number, total: number) => string
-  locationLabel: string
-  locationTitle: string
   locationText: string
   locationButton: string
   map: {
     note: string
     iframeTitle: string
-    openLink: string
   }
 
   insightsEyebrow: string

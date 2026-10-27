@@ -5,7 +5,7 @@ export function SkipLink() {
   return (
     <a
       href="#main"
-      className="focus-ring sr-only rounded-full bg-forest px-5 py-3 text-[12px] font-semibold text-white focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100]"
+      className="focus-ring sr-only rounded-full bg-forest px-5 py-3 text-ui font-medium text-white focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100]"
     >
       {t.a11y.skipToContent}
     </a>

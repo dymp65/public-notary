@@ -8,7 +8,6 @@ import { Hero } from './sections/Hero.tsx'
 import { Insights } from './sections/Insights.tsx'
 import { Office } from './sections/Office.tsx'
 import { PracticeAreas } from './sections/PracticeAreas.tsx'
-import { Principle } from './sections/Principle.tsx'
 import { Values } from './sections/Values.tsx'
 import type { ServiceId } from './types/site.ts'
 
@@ -30,12 +29,11 @@ function App() {
     <div className="min-h-screen overflow-x-clip bg-cream text-ink">
       <SkipLink />
       <Header />
-      <main id="main" tabIndex={-1} className="scroll-mt-[86px]">
+      <main id="main" tabIndex={-1} className="scroll-mt-[72px]">
         <Hero />
         <About />
-        <Principle />
-        <PracticeAreas onOpen={openService} />
         <Values />
+        <PracticeAreas onOpen={openService} />
         <Office />
         <Insights />
       </main>

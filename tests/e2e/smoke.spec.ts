@@ -5,7 +5,7 @@ import type { Page } from '@playwright/test'
 
 const LINKEDIN = 'https://www.linkedin.com/in/igustingurahpremana'
 const MAPS = 'https://maps.app.goo.gl/TyGB2XTzgziTXk4T9'
-const HEADER_HEIGHT = 86
+const HEADER_HEIGHT = 72
 
 const isMobile = (page: Page) => (page.viewportSize()?.width ?? 0) < 1024
 
@@ -198,35 +198,19 @@ test('AT-04 practice dialog traps focus, closes three ways, restores focus', asy
   expect(await page.evaluate(() => getComputedStyle(document.documentElement).overflow)).not.toBe('hidden')
 })
 
-test('AT-05 gallery wraps both ways and announces position', async ({ page }) => {
-  const order = ['office-interior', 'team', 'office-exterior', 'portrait-formal']
-  const first = page.locator('#gallery-photos img').first()
-  const status = page.locator('[aria-live="polite"]')
-  const next = page.getByRole('button', { name: 'Foto berikutnya' })
-  const prev = page.getByRole('button', { name: 'Foto sebelumnya' })
-  await first.scrollIntoViewIfNeeded()
-
-  await expect(first).toHaveAttribute('src', /office-interior/)
-  await expect(status).toHaveText('Foto 1 dari 4')
-  for (let i = 1; i <= 5; i++) {
-    await next.click()
-    await expect(first).toHaveAttribute('src', new RegExp(order[i % 4]))
-    await expect(status).toHaveText(`Foto ${(i % 4) + 1} dari 4`)
+test('AT-05 office photos load with localized alt text', async ({ page }) => {
+  // G-21: the prev/next gallery became a fixed bento of office photos (owner request)
+  // G-24: the interior/formal row is hidden by default (flags.showOfficePhotos), so only the team photo shows
+  const photos = page.locator('#office img')
+  await expect(photos).toHaveCount(1)
+  for (const photo of await photos.all()) {
+    await photo.scrollIntoViewIfNeeded()
+    await expect.poll(() => photo.evaluate((img: HTMLImageElement) => img.complete && img.naturalWidth)).toBeGreaterThan(0)
+    expect(((await photo.getAttribute('alt')) ?? '').length).toBeGreaterThan(10)
   }
-  for (let i = 4; i >= 0; i--) {
-    await prev.click()
-    await expect(first).toHaveAttribute('src', new RegExp(order[i % 4]))
-  }
-  for (const key of order) {
-    await expect.poll(() => page.evaluate(async (k) => {
-      const img = new Image()
-      img.src = `/images/${k}.jpg`
-      await img.decode()
-      return img.naturalWidth
-    }, key)).toBeGreaterThan(0)
-  }
-  const alts = await page.locator('#gallery-photos img').evaluateAll((els) => els.map((el) => el.getAttribute('alt')))
-  for (const alt of alts) expect(alt && alt.length > 10).toBe(true)
+  await expect(photos.first()).toHaveAttribute('alt', /tim kantor/)
+  await switchLocale(page)
+  await expect(photos.first()).toHaveAttribute('alt', /office team/)
 })
 
 test('AT-06 insights accordion state matches aria', async ({ page }) => {
@@ -258,7 +242,7 @@ test('AT-07 external links use the supplied URLs safely', async ({ page }) => {
   }
   const hrefs = await external.evaluateAll((els) => els.map((el) => el.getAttribute('href')))
   expect(hrefs.filter((href) => href === LINKEDIN)).toHaveLength(2)
-  expect(hrefs.filter((href) => href === MAPS)).toHaveLength(3)
+  expect(hrefs.filter((href) => href === MAPS)).toHaveLength(2)
   expect(hrefs.every((href) => href === LINKEDIN || href === MAPS)).toBe(true)
 })
 
@@ -269,7 +253,7 @@ test('C4 Pejabat Lelang hidden by default', async ({ page }) => {
   expect(await collectText(page, 'none')).not.toMatch(/auction/i)
 })
 
-test('C6 map is a lazy 2D embed and keeps the plain link', async ({ page }) => {
+test('C6 map is a deferred 2D embed and keeps the plain link', async ({ page }) => {
   const mapRequests: string[] = []
   page.on('request', (request) => {
     if (/google\.[a-z.]+\/maps/.test(request.url())) mapRequests.push(request.url())
@@ -281,10 +265,10 @@ test('C6 map is a lazy 2D embed and keeps the plain link', async ({ page }) => {
   const frame = page.locator('iframe')
   await expect(frame).toHaveAttribute('title', 'Peta lokasi kantor di Google Maps')
   await expect(frame).toHaveAttribute('loading', 'lazy')
-  await expect(page.getByRole('link', { name: /Buka di Google Maps/ })).toHaveAttribute('href', MAPS)
+  await expect(page.getByRole('link', { name: /Buka Google Maps/ }).first()).toHaveAttribute('href', MAPS)
 
   await frame.scrollIntoViewIfNeeded()
-  await expect(frame).toHaveAttribute('src', /!5e0!3m2!1sid!2sid/) // road map, Indonesian labels
+  await expect(frame).toHaveAttribute('src', /q=-8\.672171,115\.168603&hl=id&z=16&output=embed/) // road map, coordinates only, Indonesian labels
   await expect.poll(() => mapRequests.length).toBeGreaterThan(0)
 })
 

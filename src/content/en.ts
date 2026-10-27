@@ -18,9 +18,6 @@ export const en: Dictionary = {
     switchLanguage: 'Switch language to Bahasa Indonesia',
     newTab: '(opens in a new tab)',
     closeDialog: 'Close details',
-    gallery: 'Office gallery',
-    galleryPrev: 'Previous photo',
-    galleryNext: 'Next photo',
   },
   images: {
     headshot: `Portrait of ${site.name} in a white shirt and dark tie`,
@@ -43,7 +40,7 @@ export const en: Dictionary = {
   },
   officeLink: 'Office Location',
 
-  eyebrow: 'NOTARIAL PRACTICE IN BALI',
+  eyebrow: 'Notarial practice in Bali',
   heroLead: 'Committed to',
   heroAccent: 'precision.',
   heroSecond: 'Founded on',
@@ -55,7 +52,7 @@ export const en: Dictionary = {
   heroBadge: 'Notary & PPAT · Bali',
   scroll: 'Scroll to explore',
 
-  aboutEyebrow: '01 / ABOUT',
+  aboutEyebrow: 'About',
   aboutTitle: 'Professional practice rooted in integrity.',
   aboutBody: 'Every legal document and formal process requires precision and professional responsibility. This website introduces the notary’s background and the scope of the practice.',
   aboutBody2: 'Based in Badung Regency, Bali, the office provides a professional setting for notarial and land-related administrative matters in accordance with applicable regulations.',
@@ -67,11 +64,11 @@ export const en: Dictionary = {
     { title: 'Office in Badung, Bali', subtitle: 'Kerobokan, Badung Regency' },
   ],
 
-  principleEyebrow: 'PROFESSIONAL VALUES',
+  principleEyebrow: 'Professional values',
   principleTitle: 'Trust is built through every detail.',
   principleText: 'Document precision, confidentiality, and compliance are essential aspects of notarial work.',
 
-  servicesEyebrow: '02 / PRACTICE AREAS',
+  servicesEyebrow: 'Practice areas',
   servicesTitle: 'Areas of professional practice.',
   servicesText: 'General information about notarial work and land deeds. Authority and available matters depend on appointment and applicable regulations.',
   servicesTextWithAuction: 'General information about notarial work, land deeds, and auction-related functions. Authority and available matters depend on appointment and applicable regulations.',
@@ -96,30 +93,23 @@ export const en: Dictionary = {
   modalTitle: 'Practice Information',
   modalButton: 'Close',
 
-  focusLabel: 'OUR APPROACH',
-  focusTitle: 'Precision in process. Clarity in documentation.',
   values: [
     { title: 'Integrity', desc: 'Respect for ethics and professional obligations.' },
     { title: 'Precision', desc: 'Attention to detail in legal documents.' },
     { title: 'Confidentiality', desc: 'Respect for the confidentiality of information.' },
   ],
 
-  teamEyebrow: '03 / OUR OFFICE',
+  teamEyebrow: 'Our office',
   teamTitle: 'A professional and welcoming environment.',
   teamText: `A glimpse of the Notary & PPAT office of ${site.name} in Kerobokan, Badung Regency, Bali.`,
-  galleryTitle: 'Inside the office',
-  galleryStatus: (current, total) => `Photo ${current} of ${total}`,
-  locationLabel: 'LOCATION',
-  locationTitle: 'Find our office',
   locationText: 'Kerobokan, Badung Regency, Bali, Indonesia',
   locationButton: 'Open Google Maps',
   map: {
     note: 'The map is provided by Google Maps and loads when this section comes into view.',
     iframeTitle: 'Office location on Google Maps',
-    openLink: 'Open in Google Maps',
   },
 
-  insightsEyebrow: '04 / INSIGHTS',
+  insightsEyebrow: 'Insights',
   insightsTitle: 'A short guide to legal documents.',
   insightsBody: 'General educational information about notarial and land documentation procedures.',
   insights: [

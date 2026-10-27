@@ -38,8 +38,8 @@ src/
   i18n/                  locale context, LocaleProvider, useLocale()
   types/site.ts          shared types (Dictionary, SiteConfig, …)
   components/            Header, Footer, Logo, SkipLink, SectionHeader, ExternalLink,
-                         ServiceDialog, OfficeGallery, MapEmbed
-  sections/              Hero, About, Principle, PracticeAreas, Values, Office, Insights
+                         ServiceDialog, MapEmbed
+  sections/              Hero, About, Values, PracticeAreas, Office, Insights
 tests/e2e/smoke.spec.ts  acceptance tests AT-01…AT-07 and accessibility checks
 docs/                    task docs and reference material (inputs; do not edit)
 ```
@@ -49,6 +49,7 @@ docs/                    task docs and reference material (inputs; do not edit)
 - **Copy.** Edit `src/content/id.ts` and `src/content/en.ts`. Both files are typed `Dictionary`, so a key missing from either language fails the build. Keep both languages in step.
 - **Facts and links.** Edit `src/config/site.ts`: name, titles, LinkedIn and Google Maps URLs, the map embed URL, and image metadata. Nothing else in `src/` hard-codes these.
 - **Pejabat Lelang.** This is hidden by default. Set `flags.showAuctionOfficer: true` in `src/config/site.ts` only after the owner confirms the appointment and its scope. The Practice Areas grid then switches to three cards.
+- **Office photo row.** The interior and formal-portrait tiles in the Office section are hidden. Set `flags.showOfficePhotos: true` in `src/config/site.ts` to show them again.
 - **Photos.** Replace the file in `public/images/` under the same name, then update its `width`/`height` in `src/config/site.ts`. Use owner-supplied originals only, and never upscale or retouch. `position` sets the focal point where a photo is cropped.
 - **Content rules.** Do not add testimonials, ratings, client counts, phone numbers, email addresses, opening hours, a street address, awards, or sales calls-to-action. See `CLAUDE.md` → "Content guardrails".
 
