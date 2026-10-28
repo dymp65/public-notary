@@ -28,7 +28,7 @@ export function MapEmbed() {
   }, [])
 
   return (
-    <div ref={panelRef} className="h-[300px] overflow-hidden rounded-xl border border-[#d3dfd2] bg-[#e4ece5]">
+    <div ref={panelRef} className="h-[360px] overflow-hidden rounded-[28px] bg-sage md:h-[420px] lg:h-[480px]">
       <iframe
         title={t.map.iframeTitle}
         src={near ? site.mapEmbedUrl(locale) : undefined}

@@ -20,17 +20,22 @@ export const site = {
     linkedin: 'https://www.linkedin.com/in/igustingurahpremana', // O-11
     maps: 'https://maps.app.goo.gl/TyGB2XTzgziTXk4T9',
   },
-  // Owner-supplied embed for the "I Gusti Ngurah Premana (Notary Public)" listing (O-05).
-  // `!5e0` = road map (the supplied `!5e1` was satellite); `!1s<locale>` sets the label language.
+  // Road-map embed pinned at the listing's coordinates (taken from the owner-supplied listing
+  // embed, O-05). Coordinates only, on purpose: an embed that references the listing makes
+  // Google overlay its place card (street address + star rating) once the map is wide,
+  // and both are banned on this site (G-23).
   mapEmbedUrl: (locale: Locale) =>
-    `https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d4129.088106260812!2d115.16860299999999!3d-8.672171!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2dd24749f809bde7%3A0xa0a405ad5a33d123!2sI%20Gusti%20Ngurah%20Premana%20(Notary%20Public)!5e0!3m2!1s${locale}!2sid!4v1793083274999!5m2!1s${locale}!2sid`,
+    `https://maps.google.com/maps?q=-8.672171,115.168603&hl=${locale}&z=16&output=embed`,
   storageKey: 'premana.locale',
   images,
   sections: ['home', 'about', 'practice', 'office', 'insights'],
   services: ['notary', 'ppat', 'auction'],
-  serviceImages: { notary: 'writing', ppat: 'exterior', auction: 'seated' },
-  gallery: ['interior', 'team', 'exterior', 'formal'],
+  // Office tiles besides the team photo (G-21). The exterior and writing photos are not shown:
+  // the exterior screenshot is too unclear (owner, 2026-10-27).
+  officePhotos: ['interior', 'formal'],
   flags: {
     showAuctionOfficer: false as boolean, // O-02: hidden until the appointment and scope are confirmed
+    showOfficePhotos: false as boolean, // Office bento's interior + formal photo row; hidden by the owner, kept for later (G-24)
+    showDesignSwitch: true as boolean, // O-13: review-only V1 | V2 | V3 design switch; turn off before publishing
   },
 } as const satisfies SiteConfig

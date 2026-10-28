@@ -18,10 +18,8 @@ export const id: Dictionary = {
     switchLanguage: 'Ganti bahasa ke English',
     newTab: '(membuka tab baru)',
     closeDialog: 'Tutup detail',
-    gallery: 'Galeri kantor',
-    galleryPrev: 'Foto sebelumnya',
-    galleryNext: 'Foto berikutnya',
   },
+  designSwitch: { label: 'Desain', v1: 'V1', v2: 'V2', v3: 'V3' },
   images: {
     headshot: `Potret ${site.name} mengenakan kemeja putih dan dasi gelap`,
     formal: `${site.name} mengenakan jas gelap di dalam kantor`,
@@ -43,7 +41,7 @@ export const id: Dictionary = {
   },
   officeLink: 'Lokasi Kantor',
 
-  eyebrow: 'PRAKTIK NOTARIS & PPAT DI BALI',
+  eyebrow: 'Praktik Notaris & PPAT di Bali',
   heroLead: 'Komitmen pada',
   heroAccent: 'ketelitian.',
   heroSecond: 'Berlandaskan',
@@ -55,7 +53,7 @@ export const id: Dictionary = {
   heroBadge: 'Notaris & PPAT · Bali',
   scroll: 'Gulir untuk menjelajah',
 
-  aboutEyebrow: '01 / TENTANG SAYA',
+  aboutEyebrow: 'Tentang saya',
   aboutTitle: 'Profesionalisme yang berakar pada integritas.',
   aboutBody: 'Dalam setiap dokumen dan proses hukum, ketelitian dan tanggung jawab menjadi fondasi dari praktik kenotariatan. Halaman ini memperkenalkan latar belakang profesional dan bidang kewenangan yang dijalankan.',
   aboutBody2: 'Berbasis di Kabupaten Badung, Bali, kantor kami menjadi tempat berlangsungnya kegiatan kenotariatan dan pelayanan administrasi pertanahan sesuai ketentuan yang berlaku.',
@@ -67,11 +65,11 @@ export const id: Dictionary = {
     { title: 'Kantor di Badung, Bali', subtitle: 'Kerobokan, Kabupaten Badung' },
   ],
 
-  principleEyebrow: 'NILAI PROFESIONAL',
+  principleEyebrow: 'Nilai profesional',
   principleTitle: 'Kepercayaan dibangun melalui setiap detail.',
   principleText: 'Ketelitian dalam dokumen, kerahasiaan informasi, dan kepatuhan pada ketentuan hukum menjadi bagian penting dari praktik notaris.',
 
-  servicesEyebrow: '02 / BIDANG PRAKTIK',
+  servicesEyebrow: 'Bidang praktik',
   servicesTitle: 'Ruang lingkup praktik profesional.',
   servicesText: 'Informasi umum mengenai bidang kewenangan notaris dan PPAT. Kewenangan dan layanan tertentu mengikuti pengangkatan serta peraturan yang berlaku.',
   servicesTextWithAuction: 'Informasi umum mengenai bidang kewenangan notaris, PPAT, dan pejabat lelang. Kewenangan dan layanan tertentu mengikuti pengangkatan serta peraturan yang berlaku.',
@@ -96,30 +94,23 @@ export const id: Dictionary = {
   modalTitle: 'Informasi Bidang Praktik',
   modalButton: 'Tutup',
 
-  focusLabel: 'PENDEKATAN PROFESIONAL',
-  focusTitle: 'Ketelitian dalam proses. Kejelasan dalam dokumentasi.',
   values: [
     { title: 'Integritas', desc: 'Menjunjung etika dan kewajiban profesional.' },
     { title: 'Ketelitian', desc: 'Memperhatikan detail dalam setiap dokumen.' },
     { title: 'Kerahasiaan', desc: 'Menghormati kerahasiaan informasi para pihak.' },
   ],
 
-  teamEyebrow: '03 / KANTOR KAMI',
+  teamEyebrow: 'Kantor kami',
   teamTitle: 'Lingkungan kerja yang profesional dan bersahabat.',
   teamText: `Dokumentasi kantor Notaris & PPAT ${site.name} di wilayah Kerobokan, Kabupaten Badung, Bali.`,
-  galleryTitle: 'Sekilas suasana kantor',
-  galleryStatus: (current, total) => `Foto ${current} dari ${total}`,
-  locationLabel: 'ALAMAT & LOKASI',
-  locationTitle: 'Kunjungi kantor kami',
   locationText: 'Kerobokan, Kabupaten Badung, Bali, Indonesia',
   locationButton: 'Buka Google Maps',
   map: {
     note: 'Peta disediakan oleh Google Maps dan dimuat saat bagian ini ditampilkan.',
     iframeTitle: 'Peta lokasi kantor di Google Maps',
-    openLink: 'Buka di Google Maps',
   },
 
-  insightsEyebrow: '04 / INFORMASI',
+  insightsEyebrow: 'Informasi',
   insightsTitle: 'Panduan singkat seputar dokumen hukum.',
   insightsBody: 'Pengetahuan dasar mengenai dokumen notarial dan pertanahan, untuk membantu memahami proses yang relevan.',
   insights: [

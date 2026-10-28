@@ -1,6 +1,5 @@
-import { Check, X } from 'lucide-react'
+import { X } from 'lucide-react'
 import { useEffect, useRef } from 'react'
-import { site } from '../config/site.ts'
 import { useLocale } from '../i18n/useLocale.ts'
 import type { ServiceId } from '../types/site.ts'
 
@@ -19,7 +18,6 @@ export function ServiceDialog({ serviceId, onClose }: { serviceId: ServiceId | n
 
   const close = () => dialogRef.current?.close()
   const service = serviceId ? t.services[serviceId] : null
-  const image = serviceId ? site.images[site.serviceImages[serviceId]] : null
 
   return (
     <dialog
@@ -30,40 +28,24 @@ export function ServiceDialog({ serviceId, onClose }: { serviceId: ServiceId | n
         // Clicks on the ::backdrop target the <dialog> itself
         if (event.target === event.currentTarget) close()
       }}
-      className="m-auto max-h-[calc(100dvh-2rem)] w-[calc(100%-2.5rem)] max-w-[560px] overflow-y-auto rounded-2xl bg-paper p-0 text-ink shadow-2xl backdrop:bg-[#14271f]/65"
+      className="m-auto max-h-[calc(100dvh-2rem)] w-[calc(100%-2.5rem)] max-w-[560px] overflow-y-auto rounded-[28px] bg-paper p-0 text-ink shadow-[0_40px_80px_-30px_rgba(0,0,0,.35)] backdrop:bg-black/40 backdrop:backdrop-blur-sm"
     >
-      {service && image && (
-        <div className="relative">
+      {service && (
+        <div className="relative p-8 sm:p-10">
           <button
             type="button"
             aria-label={t.a11y.closeDialog}
-            className="focus-ring absolute right-4 top-4 z-10 grid h-10 w-10 place-items-center rounded-full bg-white/95"
+            className="focus-ring absolute right-4 top-4 grid h-10 w-10 place-items-center rounded-full bg-black/[.05] text-ink transition-colors hover:bg-black/10"
             onClick={close}
           >
             <X size={18} aria-hidden="true" />
           </button>
-          <img
-            src={image.src}
-            width={image.width}
-            height={image.height}
-            alt=""
-            decoding="async"
-            style={{ objectPosition: image.position }}
-            className="h-[225px] w-full object-cover photo-tint"
-          />
-          <div className="px-8 py-8">
-            <p className="section-eyebrow">{t.modalTitle}</p>
-            <h2 id="service-dialog-title" className="mt-3 font-display text-[33px]">{service.title}</h2>
-            <p className="mt-5 text-[14px] leading-[1.95] text-body">{service.detail}</p>
-            <button
-              type="button"
-              className="focus-ring mt-7 flex items-center gap-2 rounded-full border border-[#d0d9cf] px-5 py-3 text-[12px] font-bold text-forest"
-              onClick={close}
-            >
-              <Check size={15} aria-hidden="true" />
-              {t.modalButton}
-            </button>
-          </div>
+          <p className="section-eyebrow pr-12">{t.modalTitle}</p>
+          <h2 id="service-dialog-title" className="mt-3 pr-12 text-title font-semibold text-ink">{service.title}</h2>
+          <p className="mt-4 text-para text-body">{service.detail}</p>
+          <button type="button" className="focus-ring btn btn-secondary mt-8" onClick={close}>
+            {t.modalButton}
+          </button>
         </div>
       )}
     </dialog>

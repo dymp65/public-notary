@@ -4,6 +4,9 @@ export type SectionId = 'home' | 'about' | 'practice' | 'office' | 'insights'
 
 export type ServiceId = 'notary' | 'ppat' | 'auction'
 
+// Design shown by the review switch: v1 (src/v1) and v3 (src/v3) are review variants, v2 is the site
+export type Design = 'v1' | 'v2' | 'v3'
+
 export type ImageKey =
   | 'headshot'
   | 'formal'
@@ -33,10 +36,11 @@ export interface SiteConfig {
   images: Record<ImageKey, ImageMeta>
   sections: readonly SectionId[]
   services: readonly ServiceId[]
-  serviceImages: Record<ServiceId, ImageKey>
-  gallery: readonly ImageKey[]
+  officePhotos: readonly ImageKey[]
   flags: {
     showAuctionOfficer: boolean
+    showOfficePhotos: boolean
+    showDesignSwitch: boolean
   }
 }
 
@@ -67,10 +71,8 @@ export interface Dictionary {
     switchLanguage: string
     newTab: string
     closeDialog: string
-    gallery: string
-    galleryPrev: string
-    galleryNext: string
   }
+  designSwitch: Record<Design | 'label', string>
   images: Record<ImageKey, string>
   logoSubtitle: string
   languageCode: string
@@ -110,23 +112,16 @@ export interface Dictionary {
   modalTitle: string
   modalButton: string
 
-  focusLabel: string
-  focusTitle: string
   values: TitledText[]
 
   teamEyebrow: string
   teamTitle: string
   teamText: string
-  galleryTitle: string
-  galleryStatus: (current: number, total: number) => string
-  locationLabel: string
-  locationTitle: string
   locationText: string
   locationButton: string
   map: {
     note: string
     iframeTitle: string
-    openLink: string
   }
 
   insightsEyebrow: string

@@ -1,21 +1,24 @@
 import { ArrowUpRight, MapPin } from 'lucide-react'
 import { ExternalLink } from '../components/ExternalLink.tsx'
 import { MapEmbed } from '../components/MapEmbed.tsx'
-import { OfficeGallery } from '../components/OfficeGallery.tsx'
 import { SectionHeader } from '../components/SectionHeader.tsx'
 import { site } from '../config/site.ts'
 import { useLocale } from '../i18n/useLocale.ts'
 
-// Hybrid split row (requirement §5.3): team photo | text | exterior photo,
-// followed by the prototype gallery and location card.
+// Office and location in one section (G-21, owner request), as a bento (G-23):
+//   team photo (4/6) | location tile (2/6)
+//   office photo (3/6) | office photo (3/6)   ← only when flags.showOfficePhotos (G-24)
+//   map, full width
 export function Office() {
   const { t } = useLocale()
-  const { team, exterior } = site.images
+  const { team } = site.images
   return (
-    <section id="office" aria-labelledby="office-title" className="bg-paper py-24 sm:py-28">
+    <section id="office" aria-labelledby="office-title" className="bg-cream py-24 lg:py-32">
       <div className="mx-auto max-w-[1250px] px-5 sm:px-8 lg:px-10">
-        <div className="grid items-center gap-8 md:grid-cols-2 md:gap-10 lg:grid-cols-[1.4fr_1fr_.7fr]">
-          <div className="overflow-hidden rounded-[16px] bg-[#edf0ec] md:col-span-2 lg:col-span-1">
+        <SectionHeader eyebrow={t.teamEyebrow} title={t.teamTitle} titleId="office-title" desc={t.teamText} />
+
+        <div className="mt-12 grid gap-4 md:grid-cols-2 lg:grid-cols-6">
+          <div className="overflow-hidden rounded-[28px] bg-sage md:col-span-2 lg:col-span-4">
             <img
               src={team.src}
               width={team.width}
@@ -23,58 +26,40 @@ export function Office() {
               alt={t.images.team}
               loading="lazy"
               decoding="async"
-              className="aspect-[2.05] w-full object-cover object-center photo-tint"
+              className="aspect-[2.05] w-full object-cover photo-tint"
             />
           </div>
-          <div>
-            <SectionHeader eyebrow={t.teamEyebrow} title={t.teamTitle} titleId="office-title" compact />
-            <p className="mt-5 text-[14px] leading-[1.9] text-body">{t.teamText}</p>
-            <p className="mt-5 flex items-start gap-2 text-[14px] leading-[1.8] text-body">
-              <MapPin className="mt-1 shrink-0 text-forest" size={19} aria-hidden="true" />
-              {t.locationText}
-            </p>
-            <ExternalLink
-              href={site.links.maps}
-              className="focus-ring mt-7 inline-flex items-center gap-3 rounded-full bg-forest px-6 py-3.5 text-[12px] font-semibold text-white transition-colors hover:bg-forest-dark"
-            >
-              {t.locationButton}
-              <ArrowUpRight size={16} aria-hidden="true" />
-            </ExternalLink>
+          <div className="flex flex-col items-start rounded-[28px] bg-sage-light p-8 md:col-span-2 lg:col-span-2">
+            <MapPin size={22} strokeWidth={1.6} className="text-forest" aria-hidden="true" />
+            <p className="mt-4 text-h3 font-semibold text-ink">{t.locationText}</p>
+            <p className="mt-2 text-small text-muted">{t.map.note}</p>
+            <div className="mt-auto pt-6">
+              <ExternalLink href={site.links.maps} className="focus-ring btn btn-primary">
+                {t.locationButton}
+                <ArrowUpRight size={16} aria-hidden="true" />
+              </ExternalLink>
+            </div>
           </div>
-          <div className="overflow-hidden rounded-[16px] bg-[#edf0ec]">
-            <img
-              src={exterior.src}
-              width={exterior.width}
-              height={exterior.height}
-              alt={t.images.exterior}
-              loading="lazy"
-              decoding="async"
-              style={{ objectPosition: exterior.position }}
-              className="aspect-[.85] w-full object-cover photo-tint"
-            />
+          {site.flags.showOfficePhotos && site.officePhotos.map((key) => {
+            const image = site.images[key]
+            return (
+              <div key={key} className="overflow-hidden rounded-[28px] bg-sage lg:col-span-3">
+                <img
+                  src={image.src}
+                  width={image.width}
+                  height={image.height}
+                  alt={t.images[key]}
+                  loading="lazy"
+                  decoding="async"
+                  style={{ objectPosition: image.position }}
+                  className="aspect-[4/3] w-full object-cover photo-tint lg:aspect-[16/10]"
+                />
+              </div>
+            )
+          })}
+          <div className="md:col-span-2 lg:col-span-6">
+            <MapEmbed />
           </div>
-        </div>
-
-        <OfficeGallery />
-
-        <div className="mt-10 grid items-center gap-8 rounded-[16px] bg-sage-light p-7 sm:p-10 md:grid-cols-[1fr_1fr]">
-          <div>
-            <p className="section-eyebrow">{t.locationLabel}</p>
-            <h3 className="mt-3 font-display text-[32px]">{t.locationTitle}</h3>
-            <p className="mt-4 flex items-start gap-2 text-[14px] leading-[1.8] text-body">
-              <MapPin className="mt-1 shrink-0 text-forest" size={19} aria-hidden="true" />
-              {t.locationText}
-            </p>
-            <p className="mt-4 max-w-[420px] text-[12px] leading-[1.7] text-muted">{t.map.note}</p>
-            <ExternalLink
-              href={site.links.maps}
-              className="focus-ring mt-6 inline-flex items-center gap-2 border-b border-forest pb-1 text-[12px] font-bold text-forest motion-safe:hover:gap-4"
-            >
-              {t.map.openLink}
-              <ArrowUpRight size={15} aria-hidden="true" />
-            </ExternalLink>
-          </div>
-          <MapEmbed />
         </div>
       </div>
     </section>

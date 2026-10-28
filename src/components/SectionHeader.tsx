@@ -4,21 +4,16 @@ interface SectionHeaderProps {
   titleId?: string
   desc?: string
   centered?: boolean
-  // Smaller desktop title for the narrow columns of the hybrid About and Office rows
-  compact?: boolean
 }
 
-export function SectionHeader({ eyebrow, title, titleId, desc, centered = false, compact = false }: SectionHeaderProps) {
+export function SectionHeader({ eyebrow, title, titleId, desc, centered = false }: SectionHeaderProps) {
   return (
-    <div className={centered ? 'mx-auto max-w-[720px] text-center' : 'max-w-[660px]'}>
-      <p className="section-eyebrow mb-5">{eyebrow}</p>
-      <h2
-        id={titleId}
-        className={`font-display text-[33px] leading-[1.18] tracking-[-.035em] text-ink sm:text-[43px] ${compact ? 'lg:text-[38px]' : 'lg:text-[52px]'}`}
-      >
+    <div className={centered ? 'mx-auto max-w-[760px] text-center' : 'max-w-[720px]'}>
+      <p className="section-eyebrow">{eyebrow}</p>
+      <h2 id={titleId} className="mt-3 text-balance text-h2-sm font-semibold text-ink lg:text-h2">
         {title}
       </h2>
-      {desc && <p className="mt-5 text-[15px] leading-[1.9] text-body">{desc}</p>}
+      {desc && <p className="mt-5 text-lead text-body">{desc}</p>}
     </div>
   )
 }

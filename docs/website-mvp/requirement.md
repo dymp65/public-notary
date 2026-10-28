@@ -97,7 +97,7 @@ These are low-resolution crops from screenshots. Do not upscale, regenerate, or 
 | FR-04 | About. Portrait, factual introduction, credential list (hybrid), LinkedIn link | Only approved or neutral text. LinkedIn opens the exact URL in a new tab with `rel="noopener noreferrer"` | Layout changes (§5.2) | B10, C8 |
 | FR-05 | Professional values: integrity, precision, confidentiality | Non-promotional and bilingual | OK | B10 |
 | FR-06 | Practice Areas. Kenotariatan and PPAT & Pertanahan; Pejabat Lelang only once confirmed. Summary cards with a detail dialog | The dialog is accessible: focus moves in and is trapped; `Escape`, backdrop, and button all close it; focus is restored. It shows current-locale text. Nothing implies unverified authority | Gaps G-01, G-02, G-09 | B11, C3, C4 |
-| FR-07 | Office gallery. Genuine photos, prev/next controls, descriptions | Prev/next wrap correctly. Crops are consistent. No layout shift. Alt text is meaningful and localized | Gap G-15 | B11, C5 |
+| FR-07 | Office gallery. Genuine photos, prev/next controls, descriptions. *Updated 2026-10-27 (G-21): fixed bento photo tiles, no prev/next* | Prev/next wrap correctly. Crops are consistent. No layout shift. Alt text is meaningful and localized | Gap G-15 | B11, C5 |
 | FR-08 | Location. "Kerobokan, Badung" text, Google Maps link, optional embed | The link is the supplied Maps URL. The embed shows directly (owner decision 2026-10-27) but is requested only when the location card nears the viewport. The link stays usable if the iframe is blocked. No invented address or hours | Gap G-08 | B11, C6 |
 | FR-09 | Insights: authentic deed, Notary vs PPAT, document preparation | Semantic accordion (`aria-expanded`, `aria-controls`, panel IDs). Bilingual. Disclaimer visible | Gap G-06 | B10, C7 |
 | FR-10 | Footer. Name, short description, internal links, LinkedIn, Maps, current year | All links valid. Year is the current year. Text is in the active locale | OK | B9, C8 |
@@ -105,6 +105,19 @@ These are low-resolution crops from screenshots. Do not upscale, regenerate, or 
 | FR-12 | Responsive and accessible. Semantics, focus indicators, labels, modal focus management | Operable by keyboard and screen reader. WCAG 2.2 AA where applicable | Gaps G-02 to G-07, G-13 | C1–C7, D5 |
 
 ## 5. Hybrid design specification
+
+> **Superseded for visuals by the owner redesign of 2026-10-27 (G-21).** The owner asked for a more attractive, less template-like UI with apple.com and notion.com as references, and for the Office and location sections to be combined. Current page structure:
+>
+> 1. **Header** (72 px, translucent): logo, nav, language toggle, "Lokasi Kantor" pill.
+> 2. **Hero** `#home` (*G-22, owner 2026-10-27: "make like before, but the image like the current design"*): the original text column (uppercase eyebrow with a sand rule, Playfair headline with italic forest accents, lead, "Tentang Saya ↗" pill and underlined "Bidang Praktik →" link, scroll hint) | the current rounded portrait with a frosted name caption, plus the original floating formal-portrait card ("NOTARIS & PPAT · BALI") overlapping its lower-left corner (owner follow-up). The caption sits to the right of the card so the name is never covered; the card is hidden below 640 px and at 768–1023 px, where the portrait is too narrow for both. No arch, blob, or outlined circles. Portrait first on mobile, square there so the headline stays in the first screen.
+> 3. **About** `#about`: bento of intro tile (text + LinkedIn pill) | portrait tile, and a credentials strip (four items, §5.2 table).
+> 4. **Values**: one centred statement (`principleTitle` / `principleText`) and three values under hairlines. Replaces the separate Principle band and icon cards.
+> 5. **Practice** `#practice`: text-led tiles (icon, title, summary, "Baca selengkapnya" pill → dialog). No card photos; the dialog has no photo.
+> 6. **Office + location** `#office`: header, then bento of team photo | location tile (area, map note, Maps pill), interior | formal portrait (hidden by default, `flags.showOfficePhotos`, G-24), and a full-width map at the bottom (360/420/480 px tall; G-23). Replaces the split row, the prev/next gallery, and the separate location card. The exterior photo is no longer shown.
+> 7. **Insights** `#insights`: FAQ-style accordion list with dividers and +/− toggles; disclaimer below.
+> 8. **Footer** unchanged in structure.
+>
+> The text below records the earlier hybrid spec for history.
 
 Everything follows `docs/preview.html`: layout, spacing, type scale, class names, and copy.
 
@@ -149,12 +162,11 @@ Item 1 depends on O-01. The mockup's items (an institution, "since 2008", speake
 
 1. **Split row.**
    - Layout:
-     - ≥1024 px: `[team photo ~1.15fr] | [text ~1fr] | [exterior photo ~0.75fr]`.
-     - Tablet: team photo at full width, then text and exterior side by side.
-     - Mobile: stacked.
+     - ≥1024 px: `[team photo ~1.2fr] | [text ~1fr]`.
+     - Below 1024 px: stacked (team photo, then text).
+     - **Owner decision 2026-10-27:** the exterior photo column was removed ("unclear image"). The exterior still appears in the gallery and on the PPAT card.
    - **Team photo** (`team.jpg`) is the primary office image (the PRD says to prioritize office/team).
    - **Text column:** eyebrow "03 / KANTOR KAMI", h2 `teamTitle`, `teamText`, a location line (MapPin + "Kerobokan, Kabupaten Badung, Bali, Indonesia"), and an external pill "Buka Google Maps ↗".
-   - **Exterior photo:** `office-exterior.jpg`.
    - **Excluded from the mockup:** the opening-hours item, and any address detail beyond the area name.
    - Keep the row inside the 1250 px container with prototype radii. On ≥1024 px the team photo may bleed to the left edge, but only if it causes no horizontal scroll.
 2. **Gallery row** (as in the prototype):
@@ -255,6 +267,11 @@ None of the following may appear on the site, in any locale.
 | G-15 | Gallery alt texts are generic, and the current position is not announced | Localized alt text per photo; `aria-live` status | FR-07 | C5 |
 | G-16 | `id="home"` is on the page wrapper instead of the hero section | Put `id="home"` on the hero `<section>` | FR-01 | C1 |
 | G-17 | Playfair Display italic is not loaded, so the hero `<em>` uses a synthesized italic | Load `ital,wght@1,400` and confirm visually | PRD §4 | B4 |
+| G-24 | **Owner feedback 2026-10-27:** hide the Office interior/formal photo row, "do not remove it, maybe will use it later" | New flag `flags.showOfficePhotos` (default `false`). The row's markup, `officePhotos` config, images, and alt texts are all kept; setting the flag to `true` restores it | FR-07 | C10 |
+| G-23 | **Owner feedback 2026-10-27:** "need the map more width and the height more and maybe rearrange to the bottom side" | Map moved to a full-width row at the bottom (360 → 420 → 480 px tall); bento now team | location tile, interior | formal. Tested four embed URLs at 1170 and 704 px: both listing-based embeds (the owner's `pb=…` and `q=<name>`) show Google's place card with "Jl. Gn. Tangkuban Perahu No.36… 80361" and "4,9 ★ (73)"; coordinate-only embeds show the same road map and pin with no card. Switched to `maps.google.com/maps?q=-8.672171,115.168603&hl=<locale>&z=16&output=embed` (same pin location as the listing). The listing name label and Google's in-map "Buka di Maps" button are no longer shown; the site's own "Buka Google Maps" button links to the listing | FR-08, O-05 | C6, C10 |
+| G-22 | **Owner feedback 2026-10-27** (after G-21): restore the original hero, keeping the new portrait style | Hero text column restored from the pre-G-21 version. Playfair Display re-loaded (400 + italic 400 only) for the hero h1. `text-display` tokens back to 64/44 px at −0.03em. `scroll` key restored; eyebrow copy back to "Praktik Notaris & PPAT di Bali" / "Notarial practice in Bali" | FR-03 | C10 |
+| G-21 | **Owner feedback 2026-10-27:** "combine 03 Kantor Kami and Alamat & Lokasi"; "UI more attractive and not slop", referencing apple.com / notion.com. Template tells found: serif display headings, numbered uppercase eyebrows, hero blob/circles/floating card/scroll hint, duplicated value sections with stock icons, arrows on every link, Office repeating the team photo and the location three times | Redesign per §5 note: DM Sans semibold headings (Playfair dropped), sentence-case eyebrows, 28 px tiles in bento grids, pill buttons, arrows only on external links, merged Values, combined Office + location bento, FAQ list. Header 72 px. **Found while building:** a wide map tile makes Google show its place card with the street address and a 4.9★ rating, so the map tile is kept ≤ ~400 px wide (checked at 320–1440 px). FR-07's prev/next gallery is replaced by fixed photo tiles | FR-01, FR-07, FR-08, NFR-02 | C10 |
+| G-20 | **Owner feedback 2026-10-27:** colours good, "seems still off… maybe the typography". Cause: 23 font sizes (9–69 px; section h2 at 38/40/43/52), 11 line heights (1.15–2.0), 10 letter-spacings (h1 −.055em), body copy at 12–15 px, UI text at 9–12 px bold. Practice cards kept a fixed `min-h-20` from the 3-card layout | Notion-style short scale as theme tokens (`src/style.css`): display 64/44, h2 44/34, title 28, h3 24, lead 17/1.65, para 16/1.7, small 14/1.6, caption 13, ui 14 medium, label 11/.16em. Headline tracking −.03em. Fonts unchanged. Narrow hybrid columns use h2-sm until `xl`. Header nav gap 6→8 at `xl`. Practice cards: flex column with the link at `mt-auto` instead of `min-h-20` | NFR-02 | C10 |
 | G-19 | **Owner feedback 2026-10-27:** "susunan dan kombinasi warna sudah bagus, tetapi warna text terasa tidak nyambung" (layout and colours are good, but the text colours feel disjointed); notion.com allowed as the reference. Cause: about 12 slightly different green-tinted greys plus a green-black `ink` | Notion-style system measured on notion.com (headings `rgba(0,0,0,.95)`, body `.9`, secondary `.54`): three neutral black-alpha tiers, `ink` .90, `body` .72, `muted` .58 (raised from .54 to stay ≥5:1 on sage surfaces). Footer: white · white/75 · white/60. Green (`forest`) only for accents, links, and CTAs; bronze only for the logo mark and insight numbers | FR-12, NFR-02 | C10 |
 | G-18 | Text contrast below WCAG AA 4.5:1, found by Lighthouse in task D6: `muted` #73817B (3.6–4.1), eyebrow #6d8376 (3.5–4.0), several arbitrary greys (4.0–4.4), the insight numbers in `sand` (2.7), the disclaimer #87918b (2.9), and the footer © line at `white/45` (3.7). The logo link's `aria-label` also didn't contain its visible text | Smallest same-hue darkening that reaches ≥4.6:1 against the darkest background each colour sits on: `muted` → #63706A, eyebrow → #5d6f64, greys → #627068/#6b7771/#617165, numbers → #887053, disclaimer → #676f6a, © → `white/60`. The logo name is now the accessible name, with a screen-reader-only ", beranda" / ", home" | FR-12, NFR-04 | D6 |
 
@@ -284,7 +301,7 @@ These need owner input. Until each is resolved, omit the item or keep it neutral
 | O-02 | Active appointments: the area and scope of Notaris and PPAT. Is Pejabat Lelang active, and with what scope? | Auction card hidden (`showAuctionOfficer: false`) | C4 final copy, E1 |
 | O-03 | Education and career facts. The mockup's placeholders are **UNVERIFIED; do not use**: "Magister Kenotariatan – Universitas Indonesia", "Berpengalaman sejak 2008", "Pembicara & Narasumber" | Not shown; neutral credential list only | E1 |
 | O-04 | Office street address, hours, phone, email | Not shown; area name only | E1 |
-| O-05 | Do the map embed coordinates `-8.672171,115.168603` (from the prototype) match the Maps listing? | **Resolved 2026-10-27:** the owner supplied the Google Maps embed for the "I Gusti Ngurah Premana (Notary Public)" listing (same coordinates). It is used with `!5e0` (road map; the supplied code had `!5e1`, satellite) at the owner's request, with the label language following the locale. Still click-to-load | none |
+| O-05 | Do the map embed coordinates `-8.672171,115.168603` (from the prototype) match the Maps listing? | **Resolved 2026-10-27:** the owner supplied the Google Maps embed for the "I Gusti Ngurah Premana (Notary Public)" listing, which confirmed the coordinates. Since G-23 the site embeds a coordinates-only road map at those coordinates, because the listing embed shows the street address and rating when wide. Requested only near the viewport | none |
 | O-06 | Photo rights and consent (portraits, every team member, office); original high-res files. **A4 findings:** every photo is a low-res screenshot crop. The exterior (520 px wide after cleanup) and the team photo look soft on retina and large screens. The exterior and interior needed a crop to remove Google Maps UI. The headshot (630 px) is tightly framed, so the hero arch shows the face large. Originals of all seven, especially the team, exterior, and headshot, would noticeably improve quality | Prototype crops used; no upscaling | A4, D8, E2 |
 | O-07 | Editorial approval of all copy (id/en): the headline "Komitmen pada ketelitian. Berlandaskan kepercayaan.", legal explainers, disclaimer, meta text | Prototype copy used as a draft | E4 |
 | O-08 | Professional-ethics review of the presentation and CTAs against the notary (INI) and PPAT (IPPAT) codes of ethics | Informational tone; no sales CTA | E3 |
@@ -292,6 +309,7 @@ These need owner input. Until each is resolved, omit the item or keep it neutral
 | O-10 | Third-party requests: Google Fonts (on load) and Google Maps (when the location card nears the viewport). Disclose them, or self-host fonts? | Fonts served from Google; map shown directly (owner decision 2026-10-27), requested near the viewport; the visible note says it is provided by Google Maps | E3, E5 |
 | O-11 | Confirm the LinkedIn URL is the profile to publish | Used as supplied | E1 |
 | O-12 | Version control (task A2): should the repo be put under git? | Not initialized; awaiting the owner's answer | A2 |
+| O-13 | Should the review-only design switch (current ↔ previous design, [`docs/design-switcher/`](../design-switcher/)) be visible on the published site? | On (`flags.showDesignSwitch: true`) for owner review. Default plan: set it to `false` before publishing, which also stops the v1 chunk from ever loading | E6 |
 
 ## 11. Definition of Done
 
