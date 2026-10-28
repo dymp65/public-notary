@@ -179,7 +179,7 @@ Rules:
 - [ ] **E3 · Professional-ethics review:** `[!]` O-08, O-10
 - [ ] **E4 · Copy and legal-text approval:** `[!]` O-07
 - [ ] **E5 · Domain, HTTPS, deployment config:** `[!]` O-09 (then finish D1's P1 part and D3)
-- [ ] **E6 · Publish decision:** only once E1–E5 are recorded. Deployment requires explicit owner authorization.
+- [ ] **E6 · Publish decision:** `[!]` O-13 (design switch off or approved). Only once E1–E5 are recorded. Deployment requires explicit owner authorization.
 
 ## Verification log
 

@@ -19,6 +19,7 @@ export const id: Dictionary = {
     newTab: '(membuka tab baru)',
     closeDialog: 'Tutup detail',
   },
+  designSwitch: { label: 'Desain', v1: 'V1', v2: 'V2', v3: 'V3' },
   images: {
     headshot: `Potret ${site.name} mengenakan kemeja putih dan dasi gelap`,
     formal: `${site.name} mengenakan jas gelap di dalam kantor`,

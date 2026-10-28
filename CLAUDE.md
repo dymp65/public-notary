@@ -28,6 +28,8 @@ If sources disagree on a professional fact, a content right, or an ethics questi
 **[`docs/website-mvp/`](docs/website-mvp/)**: build the MVP site from the PRD.
 State on 2026-10-27: phases A–D implemented and verified (see the verification log in tasks.md). Open: A2 (git, owner decision), D3/D8 (blocked on O-09/O-06), D5 human checks (VoiceOver, Firefox/Safari/real mobile), and the phase E publication gate. Update this line as phases complete.
 
+Side task **[`docs/design-switcher/`](docs/design-switcher/)** (2026-10-28, done): a floating review switch `V1 | V2 | V3`: the previous design (`origin/dev-design-v1`, `src/v1/`), the current design, and a dark variant after an owner reference image (`src/v3/`). V3 breaks the light-first rule and is review-only until the owner decides (DS-O2). It sits behind `flags.showDesignSwitch` and must be off before publishing (O-13).
+
 - [requirement.md](docs/website-mvp/requirement.md): scope, FR/NFR, hybrid design spec, prototype gaps (`G-xx`), open items (`O-xx`)
 - [plan.md](docs/website-mvp/plan.md): architecture, file map, key technical decisions
 - [tasks.md](docs/website-mvp/tasks.md): ordered checklist (`A1`…`E6`) and verification log
@@ -124,13 +126,16 @@ index.html               lang="id", metadata, fonts, hero preload
 public/images/           7 photos extracted from docs/preview.html
 scripts/                 extract-preview-images.mjs (one-off, no deps)
 src/
-  main.tsx  App.tsx  style.css
+  main.tsx  Root.tsx  App.tsx  style.css   Root = design switch (current App | lazy v1 App)
   config/site.ts         name, titles, URLs, map embed, image metadata, feature flags
   content/id.ts  en.ts   every visible string, aria-label, and alt text
   i18n/                  locale context, LocaleProvider, useLocale()
   types/site.ts          Locale, ServiceId, ImageKey, Dictionary, SiteConfig
   components/            Header, Footer, Logo, SectionHeader, SkipLink, ExternalLink, ServiceDialog, MapEmbed
   sections/              Hero, About, Values, PracticeAreas, Office, Insights
+  v3/                    dark review variant (shared dictionary/config, own markup); review only
+  v1/                    previous design (origin/dev-design-v1) for review only; mirrors src/ and reuses i18n,
+                         ExternalLink, images, and facts. Don't evolve it; fix guardrail issues only
 ```
 
 - Components get text only through `useLocale()`. JSX contains no hard-coded strings, including `aria-label` and `alt`.

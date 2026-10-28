@@ -309,6 +309,7 @@ These need owner input. Until each is resolved, omit the item or keep it neutral
 | O-10 | Third-party requests: Google Fonts (on load) and Google Maps (when the location card nears the viewport). Disclose them, or self-host fonts? | Fonts served from Google; map shown directly (owner decision 2026-10-27), requested near the viewport; the visible note says it is provided by Google Maps | E3, E5 |
 | O-11 | Confirm the LinkedIn URL is the profile to publish | Used as supplied | E1 |
 | O-12 | Version control (task A2): should the repo be put under git? | Not initialized; awaiting the owner's answer | A2 |
+| O-13 | Should the review-only design switch (current ↔ previous design, [`docs/design-switcher/`](../design-switcher/)) be visible on the published site? | On (`flags.showDesignSwitch: true`) for owner review. Default plan: set it to `false` before publishing, which also stops the v1 chunk from ever loading | E6 |
 
 ## 11. Definition of Done
 

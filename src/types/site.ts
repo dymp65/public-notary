@@ -4,6 +4,9 @@ export type SectionId = 'home' | 'about' | 'practice' | 'office' | 'insights'
 
 export type ServiceId = 'notary' | 'ppat' | 'auction'
 
+// Design shown by the review switch: v1 (src/v1) and v3 (src/v3) are review variants, v2 is the site
+export type Design = 'v1' | 'v2' | 'v3'
+
 export type ImageKey =
   | 'headshot'
   | 'formal'
@@ -37,6 +40,7 @@ export interface SiteConfig {
   flags: {
     showAuctionOfficer: boolean
     showOfficePhotos: boolean
+    showDesignSwitch: boolean
   }
 }
 
@@ -68,6 +72,7 @@ export interface Dictionary {
     newTab: string
     closeDialog: string
   }
+  designSwitch: Record<Design | 'label', string>
   images: Record<ImageKey, string>
   logoSubtitle: string
   languageCode: string

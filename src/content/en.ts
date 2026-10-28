@@ -19,6 +19,7 @@ export const en: Dictionary = {
     newTab: '(opens in a new tab)',
     closeDialog: 'Close details',
   },
+  designSwitch: { label: 'Design', v1: 'V1', v2: 'V2', v3: 'V3' },
   images: {
     headshot: `Portrait of ${site.name} in a white shirt and dark tie`,
     formal: `${site.name} in a dark suit inside the office`,

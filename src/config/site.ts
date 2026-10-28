@@ -36,5 +36,6 @@ export const site = {
   flags: {
     showAuctionOfficer: false as boolean, // O-02: hidden until the appointment and scope are confirmed
     showOfficePhotos: false as boolean, // Office bento's interior + formal photo row; hidden by the owner, kept for later (G-24)
+    showDesignSwitch: true as boolean, // O-13: review-only V1 | V2 | V3 design switch; turn off before publishing
   },
 } as const satisfies SiteConfig

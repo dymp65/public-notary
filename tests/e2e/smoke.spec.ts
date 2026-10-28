@@ -284,3 +284,60 @@ test('C9 reduced motion disables smooth scroll and hover motion', async ({ brows
   expect(await card.evaluate((el) => getComputedStyle(el).transform)).toBe('none')
   await context.close()
 })
+
+test('design switch loads the previous design, keeps the locale, and switches back', async ({ page }) => {
+  const group = page.getByRole('group', { name: 'Desain' })
+  await expect(group.getByRole('button', { name: 'V2', exact: true })).toHaveAttribute('aria-pressed', 'true')
+  await expect(page.locator('[data-design="v1"]')).toHaveCount(0)
+
+  await group.getByRole('button', { name: 'V1', exact: true }).click()
+  await expect(page.locator('[data-design="v1"]')).toBeVisible()
+  await expect(page).toHaveURL(/\?design=v1$/)
+  await expect(page.locator('#about .section-eyebrow')).toHaveText('01 / TENTANG SAYA')
+  await expect(page.locator('h1')).toHaveCount(1)
+  // v1 keeps the coordinates-only map embed, never the listing embed (G-23)
+  await page.locator('#office').scrollIntoViewIfNeeded()
+  await expect(page.locator('#office iframe')).toHaveAttribute('src', /maps\?q=-8\.672171,115\.168603/)
+
+  await page.reload()
+  await expect(page.locator('[data-design="v1"]')).toBeVisible()
+
+  await page.getByRole('group', { name: 'Desain' }).getByRole('button', { name: 'V2', exact: true }).click()
+  await expect(page.locator('[data-design="v1"]')).toHaveCount(0)
+  await expect(page).not.toHaveURL(/design=/)
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true)
+})
+
+test('V3 design keeps all sections, one h1, the guardrails, and working controls', async ({ page }) => {
+  await page.goto('/?design=v3')
+  await expect(page.locator('[data-design="v3"]')).toBeVisible()
+  await expect(page.getByRole('group', { name: 'Desain' }).getByRole('button', { name: 'V3', exact: true })).toHaveAttribute('aria-pressed', 'true')
+  await expect(page.locator('h1')).toHaveCount(1)
+  for (const id of ['home', 'about', 'practice', 'office', 'insights']) await expect(page.locator(`#${id}`)).toHaveCount(1)
+  // The reference's stats strip carries the four factual credentials instead (no numbers, no booking CTA)
+  await expect(page.locator('#home li')).toHaveCount(4)
+  const text = await page.locator('[data-design="v3"]').innerText()
+  expect(text).not.toMatch(/\d+\s*\+|\d+\s*%|konsultasi|book|pejabat lelang/i)
+  for (const link of await page.locator('a[target="_blank"]').all()) {
+    await expect(link).toHaveAttribute('rel', 'noopener noreferrer')
+  }
+
+  const more = page.locator('#practice button[aria-haspopup="dialog"]').first()
+  await more.click()
+  await expect(page.locator('dialog[open]')).toBeVisible()
+  await page.keyboard.press('Escape')
+  await expect(page.locator('dialog[open]')).toHaveCount(0)
+  await expect(more).toBeFocused()
+
+  if (isMobile(page)) {
+    const toggle = page.locator('button[aria-controls="mobile-menu"]')
+    await toggle.click()
+    await expect(toggle).toHaveAttribute('aria-expanded', 'true')
+    await page.locator('#mobile-menu a[href="#office"]').click()
+    await expect(page.locator('#mobile-menu')).toBeHidden()
+  }
+
+  await page.locator('#office').scrollIntoViewIfNeeded()
+  await expect(page.locator('#office iframe')).toHaveAttribute('src', /maps\?q=-8\.672171,115\.168603/)
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true)
+})
